@@ -405,7 +405,7 @@
 
                 <div class="btn-container">
                     <button onclick="window.print()" class="btn btn-print">🖨️ Print Receipt</button>
-                    <a href="ViewMedicine.jsp" class="btn btn-back">📋 Back to Medicines</a>
+                    <a href="ViewMedicines.jsp" class="btn btn-back">📋 Back to Medicines</a>
                 </div>
             </div>
         </div>

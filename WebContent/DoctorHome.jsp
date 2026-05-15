@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-    String id = (String) session.getAttribute("id");
+    String id = (String) session.getAttribute("doctorEmail");
     if(id == null) {
         response.sendRedirect("doctor.html");
         return;

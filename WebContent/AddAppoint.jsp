@@ -1,286 +1,275 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ include file="db.jsp"%>
+
 <%
-    String userId = (String) session.getAttribute("id");
-    if(userId == null) {
-        response.sendRedirect("doctor.html");
-        return;
-    }
+	String patientEmail = (String) session.getAttribute("id");
+	Integer patientId = (Integer) session.getAttribute("patient_id");
+	String patientName = (String) session.getAttribute("patient_name");
+
+	if (patientEmail == null || patientId == null) {
+		response.sendRedirect("index.html");
+		return;
+	}
+
+	String doctorParam = request.getParameter("doctor");
+	String msg = "";
+	String doctorName = "";
+
+	// Fetch Doctor Name for better UX
+	if (doctorParam != null) {
+		try {
+			PreparedStatement psDoc = con.prepareStatement("SELECT name FROM doctor WHERE id = ?");
+			psDoc.setInt(1, Integer.parseInt(doctorParam));
+			ResultSet rsDoc = psDoc.executeQuery();
+			if (rsDoc.next()) {
+				doctorName = rsDoc.getString("name");
+			}
+			rsDoc.close();
+			psDoc.close();
+		} catch (Exception e) {
+			doctorName = "Doctor ID: " + doctorParam;
+		}
+	}
+
+	if (request.getParameter("submit") != null) {
+		try {
+			int doc_id = Integer.parseInt(request.getParameter("doctor_id"));
+			String app_date = request.getParameter("date");
+			String app_time = request.getParameter("time");
+
+			PreparedStatement ps = con.prepareStatement(
+					"INSERT INTO appointments(patient_id, doctor_id, appointment_date, appointment_time, status) "
+							+ "VALUES(?, ?, ?, ?, ?)");
+
+			ps.setInt(1, patientId);
+			ps.setInt(2, doc_id);
+			ps.setString(3, app_date);
+			ps.setString(4, app_time);
+			ps.setString(5, "Booked");
+
+			int i = ps.executeUpdate();
+			msg = (i > 0) ? "success" : "error";
+			ps.close();
+		} catch (Exception e) {
+			msg = "error";
+			e.printStackTrace();
+		}
+	}
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Appointment - Hospital Management</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
-        .container { 
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .form-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            animation: slideIn 0.5s ease-out;
-        }
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .form-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
-        }
-        .form-header h2 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        .form-header p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        .icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 15px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-        }
-        .form-body {
-            padding: 40px 30px;
-        }
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            border: 1px solid #c3e6cb;
-            font-weight: 600;
-            text-align: center;
-            animation: fadeIn 0.5s ease-out;
-        }
-        .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            border: 1px solid #f5c6cb;
-            font-weight: 600;
-            text-align: center;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        .form-group {
-            margin-bottom: 25px;
-        }
-        .form-group label 
-        {
-            display: block;
-            margin-bottom: 8px; 
-            color: #333;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .form-group input 
-        {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 15px;
-            transition: all 0.3s ease;
-        }
-        .form-group input:focus 
-        {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        .btn-container 
-          {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Appointment - MediCore HMS</title>
+<link
+	href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap"
+	rel="stylesheet">
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
 
-        .btn {
-            flex: 1;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            text-align: center;
-            display: inline-block;
-        }
+body {
+	font-family: 'DM Sans', sans-serif;
+	background: #f5f7fb;
+	display: flex;
+	min-height: 100vh;
+}
 
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-        .action-links {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-top: 30px;
-        }
-        .link-btn {
-            padding: 12px 25px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-        .link-btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .link-btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-        .link-btn-secondary {
-            background: #f1f1f1;
-            color: #333;
-        }
-        .link-btn-secondary:hover {
-            background: #e0e0e0;
-            transform: translateY(-2px);
-        }
-        .link-btn-logout {
-            background: #ff4757;
-            color: white;
-        }
-        .link-btn-logout:hover {
-            background: #ff3838;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
-        }
-    </style>
+.sidebar {
+	width: 240px;
+	min-height: 100vh;
+	background: #083b2f;
+	color: white;
+	position: fixed;
+	left: 0;
+	top: 0;
+}
+
+.sidebar-logo {
+	padding: 28px 22px;
+	font-size: 30px;
+	font-weight: 700;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-user {
+	padding: 22px;
+}
+
+.nav-item {
+	display: block;
+	padding: 15px 22px;
+	color: rgba(255, 255, 255, 0.82);
+	text-decoration: none;
+}
+
+.nav-item:hover {
+	background: rgba(255, 255, 255, 0.1);
+	color: white;
+}
+
+.main {
+	margin-left: 240px;
+	padding: 40px;
+	width: 100%;
+}
+
+.card {
+	background: white;
+	border-radius: 18px;
+	padding: 35px;
+	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+	max-width: 650px;
+}
+
+h1 {
+	font-size: 36px;
+	margin-bottom: 10px;
+	color: #111827;
+}
+
+h3 {
+	color: #22c55e;
+	margin-bottom: 25px;
+}
+
+.success-message {
+	background: #dcfce7;
+	color: #166534;
+	padding: 14px;
+	border-radius: 10px;
+	margin-bottom: 20px;
+}
+
+.error-message {
+	background: #fee2e2;
+	color: #991b1b;
+	padding: 14px;
+	border-radius: 10px;
+	margin-bottom: 20px;
+}
+
+.form-group {
+	margin-bottom: 22px;
+}
+
+label {
+	display: block;
+	margin-bottom: 8px;
+	font-weight: 600;
+	color: #374151;
+}
+
+input {
+	width: 100%;
+	height: 52px;
+	border: 1px solid #d1d5db;
+	border-radius: 10px;
+	padding: 0 16px;
+	font-size: 16px;
+}
+
+input:focus {
+	outline: none;
+	border-color: #22c55e;
+	box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+}
+
+.btn {
+	background: #22c55e;
+	color: white;
+	border: none;
+	padding: 14px 28px;
+	border-radius: 10px;
+	font-size: 16px;
+	font-weight: 600;
+	cursor: pointer;
+	margin-right: 12px;
+}
+
+.btn:hover {
+	background: #15803d;
+}
+
+.btn-secondary {
+	background: #6b7280;
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="form-container">
-            <div class="form-header">
-                <div class="icon">📅</div>
-                <h2>Book Appointment</h2>
-                <p>Schedule a new patient appointment</p>
-            </div>
-            <div class="form-body">
-                <%
-                    String msg = "";
-                    String doctor_id = request.getParameter("doctor_id");
 
-                    if (request.getParameter("submit") != null) {
-                        int patient_id = Integer.parseInt(request.getParameter("patient_id"));
-                        int doc_id = Integer.parseInt(request.getParameter("doctor_id"));
-                        String date = request.getParameter("date");
-                        String time = request.getParameter("time");
+	<!-- Sidebar -->
+	<aside class="sidebar">
+		<div class="sidebar-logo">MediCore HMS</div>
+		<div class="sidebar-user">
+			<b><%=patientName != null ? patientName : patientEmail%></b><br>
+			<small>Appointment Panel</small>
+		</div>
+		<a href="PatientHome.jsp" class="nav-item">Dashboard</a> <a
+			href="ViewAppoint.jsp" class="nav-item">My Appointments</a> <a
+			href="doctor.html" class="nav-item">Doctors</a> <a href="index.html"
+			class="nav-item">Logout</a>
+	</aside>
 
-                        try {
-                            PreparedStatement ps = con.prepareStatement(
-                                "INSERT INTO appointments(patient_id, doctor_id, appointment_date, appointment_time, status) VALUES(?,?,?,?,?)");
-                            
-                            ps.setInt(1, patient_id);
-                            ps.setInt(2, doc_id);
-                            ps.setString(3, date);
-                            ps.setString(4, time);
-                            ps.setString(5, "Booked");
-                            
-                            int i = ps.executeUpdate();
-                            
-                            if (i > 0) {
-                                msg = "success";
-                            } else {
-                                msg = "error";
-                            }
-                            ps.close();
-                        } catch (Exception e) {
-                            msg = "error: " + e.getMessage();
-                        }
-                    }
-                    if (msg.equals("success")) 
-                    {
-                %>
-                    <div class="success-message">Appointment Booked Successfully!</div>
-                <%
-                    }else if (!msg.isEmpty() && !msg.equals("")) {
-                %>
-                    <div class="error-message"> ❌ Booking Failed! Please try again.</div>
-                <%
-                    }
-                %>
-                <form method="post">
-                    <div class="form-group">
-                        <label for="patient_id">Patient ID</label>
-                        <input type="number" id="patient_id" name="patient_id" required placeholder="Enter patient ID">
-                    </div>
-                    <div class="form-group">
-                        <label for="doctor_id">Doctor ID</label>
-                        <input type="number" id="doctor_id" name="doctor_id" value="<%= (doctor_id != null ? doctor_id : "") %>" required placeholder="Enter doctor ID">
-                    </div>
-                    <div class="form-group">
-                        <label for="date">Appointment Date</label>
-                        <input type="date" id="date" name="date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="time">Appointment Time</label>
-                        <input type="time" id="time" name="time" required>
-                    </div>
-                    <div class="btn-container">
-                        <button type="submit" name="submit" class="btn btn-primary">Book Appointment</button>
-                    </div>
-                </form> 
-                <div class="action-links">
-                    <a href="ViewAppoint.jsp" class="link-btn link-btn-primary">📋 View Appointments</a>
-                    <a href="ShowDoctor.jsp" class="link-btn link-btn-secondary">👥 Back to Doctors</a>
-                    <a href="index.html" class="link-btn link-btn-logout">🚪 Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
+	<!-- Main Content -->
+	<main class="main">
+	<h1>Book Appointment</h1>
+
+	<div class="card">
+		<h3>Schedule New Appointment</h3>
+
+		<%
+			if ("success".equals(msg)) {
+		%>
+		<div class="success-message">✅ Appointment Booked Successfully!</div>
+		<%
+			} else if ("error".equals(msg)) {
+		%>
+		<div class="error-message">❌ Booking Failed! Please try again.</div>
+		<%
+			}
+		%>
+
+		<form method="post">
+			<div class="form-group">
+				<label>Patient ID</label> <input type="number" name="patient_id"
+					value="<%=patientId%>" readonly>
+			</div>
+
+			<div class="form-group">
+				<label>Doctor</label> <input type="text"
+					value="<%=doctorName.isEmpty() ? "Doctor ID: " + doctorParam : doctorName%>"
+					readonly> <input type="hidden" name="doctor_id"
+					value="<%=doctorParam != null ? doctorParam : ""%>">
+			</div>
+
+			<div class="form-group">
+				<label>Appointment Date</label> <input type="date" name="date"
+					required>
+			</div>
+
+			<div class="form-group">
+				<label>Appointment Time</label> <input type="time" name="time"
+					required>
+			</div>
+
+			<button type="submit" name="submit" class="btn">Book
+				Appointment</button>
+		</form>
+
+		<div style="margin-top: 30px;">
+			<a href="ViewAppoint.jsp" class="btn">View Appointments</a> <a
+				href="PatientHome.jsp" class="btn btn-secondary">Back to
+				Dashboard</a>
+		</div>
+	</div>
+	</main>
+
 </body>
 </html>

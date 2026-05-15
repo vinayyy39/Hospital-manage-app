@@ -1,103 +1,43 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*"%>
+
 <%
-    String id = request.getParameter("id");
-    String pwd = request.getParameter("pwd");
-    
-    if(id != null && pwd != null && id.equals("vinay12") && pwd.equals("vinayy@122")) {
-        session.setAttribute("id", id);
-        response.sendRedirect("DoctorHome.jsp");
-    } else {
-%>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Failed</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+	String email = request.getParameter("id");
+	String pwd = request.getParameter("pwd");
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
+	boolean valid = false;
+	String doctorName = "";
 
-        .error-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            text-align: center;
-            max-width: 400px;
-            animation: shake 0.5s ease-out;
-        }
+	try {
+		// Load MySQL Driver
+		Class.forName("com.mysql.jdbc.Driver");
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
+		// Database Connection
+		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/adv430", "root", "398654");
 
-        .error-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            background: #ff4757;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            color: white;
-        }
+		// SQL Query
+		PreparedStatement ps = con.prepareStatement("SELECT * FROM doctor WHERE email=? AND pwd=?");
 
-        h1 {
-            color: #ff4757;
-            margin-bottom: 15px;
-            font-size: 24px;
-        }
+		ps.setString(1, email);
+		ps.setString(2, pwd);
 
-        p {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 16px;
-        }
+		ResultSet rs = ps.executeQuery();
 
-        .btn-back {
-            display: inline-block;
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
+		if (rs.next()) {
+			valid = true;
 
-        .btn-back:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-    </style>
-</head>
-<body>
-    <div class="error-container">
-        <div class="error-icon">✖</div>
-        <h1>Login Failed</h1>
-        <p>Invalid ID or Password. Please try again.</p>
-        <a href="doctor.html" class="btn-back">Back to Login</a>
-    </div>
-</body>
-</html>
-<%
-    }
+			doctorName = rs.getString("name");
+
+			// Create Session
+			session.setAttribute("doctorEmail", email);
+			session.setAttribute("doctorName", doctorName);
+
+			response.sendRedirect("DoctorHome.jsp");
+		} else {
+			out.println("<h3 style='color:red;text-align:center;'>Invalid Email or Password</h3>");
+		}
+
+		con.close();
+	} catch (Exception e) {
+		out.println(e);
+	}
 %>

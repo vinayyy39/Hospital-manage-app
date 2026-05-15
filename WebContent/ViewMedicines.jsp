@@ -286,7 +286,6 @@
             <div class="page-actions">
                 <a href="AddMedical.jsp" class="btn">Add Medicine</a>
                 <a href="AddBilling.jsp" class="btn btn-secondary">Create Bill</a>
-                <a href="PatientHome.jsp" class="btn btn-outline">Dashboard</a>
             </div>
         </div>
 
