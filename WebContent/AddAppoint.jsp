@@ -8,15 +8,13 @@
 	String patientName = (String) session.getAttribute("patient_name");
 
 	if (patientEmail == null || patientId == null) {
-		response.sendRedirect("index.html");
+		response.sendRedirect("index.html"); 
 		return;
 	}
 
 	String doctorParam = request.getParameter("doctor");
 	String msg = "";
 	String doctorName = "";
-
-	// Fetch Doctor Name for better UX
 	if (doctorParam != null) {
 		try {
 			PreparedStatement psDoc = con.prepareStatement("SELECT name FROM doctor WHERE id = ?");
@@ -31,7 +29,6 @@
 			doctorName = "Doctor ID: " + doctorParam;
 		}
 	}
-
 	if (request.getParameter("submit") != null) {
 		try {
 			int doc_id = Integer.parseInt(request.getParameter("doctor_id"));
@@ -57,7 +54,6 @@
 		}
 	}
 %>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -127,7 +123,6 @@ body {
 	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
 	max-width: 650px;
 }
-
 h1 {
 	font-size: 36px;
 	margin-bottom: 10px;

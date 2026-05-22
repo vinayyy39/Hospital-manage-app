@@ -10,7 +10,7 @@
 %>
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Appointments - Hospital Management</title>
@@ -21,7 +21,7 @@
             box-sizing: border-box;
         }
 
-        body {
+        body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
@@ -51,9 +51,8 @@
                 opacity: 1;
                 transform: translateY(0);
             }
-        }
-
-        .header h2 {
+        }       
+            .header h2 {
             color: #333;
             font-size: 28px;
             margin-bottom: 10px;
@@ -273,7 +272,7 @@
                     </tr>
                     <%
                         }
-                        
+                
                         rs.close();
                         ps.close();
                     } catch(Exception e) {
@@ -282,7 +281,6 @@
                     %>
                 </tbody>
             </table>
-
             <div class="action-links">
                 <a href="AddAppoint.jsp" class="link-btn link-btn-primary">➕ Add New Appointment</a>
                 <a href="DoctorHome.jsp" class="link-btn link-btn-secondary">🏠 Dashboard</a>
