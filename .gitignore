@@ -1,6 +1,17 @@
+# Build outputs 
 target/ 
-*.war 
-*.jar 
+build/ 
+dist/ 
+ 
+# Compiled files 
 *.class 
+*.jar 
+*.war 
+*.ear 
+ 
+# IDE files 
 .classpath 
 .project 
+.settings/ 
+*.iml 
+.idea/ 
