@@ -1,23 +1,11 @@
-# Use Maven with Java 8
-FROM maven:3.9.6-eclipse-temurin-8 AS build
+FROM tomcat:9.0-jdk8
 
-WORKDIR /app
-
-# Copy project files
-COPY . .
-
-# Build WAR file
-RUN mvn clean package -DskipTests
-
-# Tomcat image
-FROM tomcat:8.5-jdk8-temurin
-
-# Remove default apps
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Copy WAR file to Tomcat
-COPY --from=build /app/target/hospital-management-system.war /usr/local/tomcat/webapps/ROOT.war
+RUN sed -i 's/port="8005"/port="-1"/' /usr/local/tomcat/conf/server.xml
+
+COPY target/hospital.war /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 8080
 
-CMD ["catalina.sh", "run"]
+CMD sed -i "s/8080/${PORT}/g" /usr/local/tomcat/conf/server.xml && catalina.sh run

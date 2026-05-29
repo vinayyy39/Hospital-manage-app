@@ -126,7 +126,7 @@
             transition: var(--transition);
             text-decoration: none;
             width: 100%;
-        }
+        }           rr
 
         .btn:hover {
             background: var(--teal-hover);
