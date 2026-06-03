@@ -1,25 +1,25 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*"%>
-<%@ include file="db.jsp"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> 
+<%@ page import="java.sql.*"%> 
+<%@ include file="db.jsp"%> 
 <% 
     String userId = (String) session.getAttribute("id");
     if(userId == null) {
         response.sendRedirect("doctor.html");
         return;
     }
-%>   
+%>      
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head>  
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor List - Hospital Management</title>
-    <style>
+    <title>Doctor List - Hospital Management</title> 
+    <style> 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
+        }   
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -38,9 +38,8 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             animation: fadeInDown 0.6s ease-out;
         }
-
-        @keyframes fadeInDown {
-            from {
+        @keyframes fadeInDown {   
+            from { 
                 opacity: 0;
                 transform: translateY(-20px);
             }
@@ -48,12 +47,12 @@
                 opacity: 1;
                 transform: translateY(0);
             }
-        }
+        } 
         .header h2 {
             color: #333;
             font-size: 28px;
             margin-bottom: 10px;
-        }
+        } 
         .header p {
             color: #666;
             font-size: 14px;
@@ -75,7 +74,7 @@
                 opacity: 1;
                 transform: translateY(0);
             }
-        }
+        } 
         table {
             width: 100%;
             border-collapse: collapse;
@@ -85,7 +84,7 @@
         }
         thead th {
             color: white;
-            padding: 15px;
+            padding: 15px; 	
             text-align: left;
             font-weight: 600;
             font-size: 14px;
@@ -122,19 +121,16 @@
             font-weight: 600;
             transition: all 0.3s ease;
         }
-
         .btn-book:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
         }
-
         .action-buttons {
             display: flex;
             gap: 15px;
             margin-top: 30px;
             flex-wrap: wrap;
         }
-
         .btn {
             padding: 12px 30px;
             border-radius: 10px;
