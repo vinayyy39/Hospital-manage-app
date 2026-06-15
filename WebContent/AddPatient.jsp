@@ -8,6 +8,7 @@
 	String ge = request.getParameter("gender");
 	String phn = request.getParameter("phone");
 	int phone = Integer.parseInt(phn);
+	
 	String add = request.getParameter("address");
 	String hm = "insert into patient values(?,?,?,?,?,?)";
 	PreparedStatement ps = con.prepareStatement(hm);       

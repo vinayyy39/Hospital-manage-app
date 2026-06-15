@@ -6,7 +6,9 @@
 	String pwd = request.getParameter("pwd");
 
 	try{
-	Connection con = hospital.DBConnection.getConnection();
+	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital",
+	        "root",
+	        "398654");
 
 	String qr = "SELECT * FROM patient WHERE email=? AND pwd=?";
 

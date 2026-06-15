@@ -14,7 +14,9 @@ String pwd = request.getParameter("password");
 
 try
 {
-    Connection con = hospital.DBConnection.getConnection();
+    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital",
+            "root",
+            "398654");
 
     PreparedStatement ps = con.prepareStatement(
         "insert into patient values(?,?,?,?,?,?,?,?,?)"

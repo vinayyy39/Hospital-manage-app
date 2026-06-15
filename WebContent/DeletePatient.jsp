@@ -1,5 +1,5 @@
 <%@ page import="java.sql.*"%>
-<%@ include file="db.jsp"%>
+
 
 <%
 	try {
@@ -7,7 +7,9 @@
 		if (id != null && !id.isEmpty()) {
 
 			int ig = Integer.parseInt(id);
-
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital",
+			        "root",
+			        "398654");
 			String sql = "DELETE FROM patient WHERE id=?";
 			PreparedStatement ps = con.prepareStatement(sql);
 
