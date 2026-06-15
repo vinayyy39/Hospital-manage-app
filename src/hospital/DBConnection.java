@@ -39,32 +39,42 @@ public class DBConnection {
             dbPassword = "398654";
         }
         
-        // Parse mysql:// protocol format (like mysql://user:pass@host:port/database)
-        if (dbUrl.startsWith("mysql://")) {
-            try {
-                String cleanUrl = dbUrl.substring(8);
-                int atSign = cleanUrl.indexOf("@");
-                if (atSign != -1) {
-                    String credentials = cleanUrl.substring(0, atSign);
-                    String hostDb = cleanUrl.substring(atSign + 1);
-                    int colon = credentials.indexOf(":");
-                    if (colon != -1) {
-                        dbUser = credentials.substring(0, colon);
-                        dbPassword = credentials.substring(colon + 1);
-                    }
-                    dbUrl = "jdbc:mysql://" + hostDb;
-                } else {
-                    dbUrl = "jdbc:mysql://" + cleanUrl;
-                }
-            } catch (Exception e) {
-                // ignore and try to connect with raw URL
+        // Clean and parse the input URL to extract credentials and form a valid JDBC URL
+        String hostAndDb = dbUrl;
+        
+        // Remove prefixes
+        if (hostAndDb.startsWith("jdbc:mysql://")) {
+            hostAndDb = hostAndDb.substring(13);
+        } else if (hostAndDb.startsWith("mysql://")) {
+            hostAndDb = hostAndDb.substring(8);
+        } else if (hostAndDb.startsWith("jdbc:mysql:")) {
+            hostAndDb = hostAndDb.substring(11);
+        } else if (hostAndDb.startsWith("jdbc:")) {
+            hostAndDb = hostAndDb.substring(5);
+        }
+        
+        // Remove leading slashes if any (like from jdbc:// or mysql://)
+        while (hostAndDb.startsWith("/")) {
+            hostAndDb = hostAndDb.substring(1);
+        }
+        
+        // Split credentials if present (user:pass@host:port/db)
+        int atSign = hostAndDb.indexOf("@");
+        if (atSign != -1) {
+            String credentials = hostAndDb.substring(0, atSign);
+            hostAndDb = hostAndDb.substring(atSign + 1);
+            
+            int colon = credentials.indexOf(":");
+            if (colon != -1) {
+                dbUser = credentials.substring(0, colon);
+                dbPassword = credentials.substring(colon + 1);
+            } else {
+                dbUser = credentials;
             }
         }
         
-        // Ensure the URL is prefixed with jdbc:
-        if (!dbUrl.startsWith("jdbc:")) {
-            dbUrl = "jdbc:" + dbUrl;
-        }
+        // Construct clean JDBC URL
+        dbUrl = "jdbc:mysql://" + hostAndDb;
         
         // Auto-append parameters to prevent SSL and public key retrieval handshake failures
         if (!dbUrl.contains("useSSL=")) {
