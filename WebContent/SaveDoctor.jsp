@@ -9,7 +9,7 @@ boolean success = false;
 String errorMsg = null;
 try {
     long phone = Long.parseLong(phoneStr);
-    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital",
+    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/adv430",
             "root",
             "398654");
     String sql = "INSERT INTO doctor(name, specialization, phone, email, pwd) VALUES(?,?,?,?,?)";

@@ -9,9 +9,9 @@
 
 	try {
 		// Database Connection
-		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital",
-		        "root",
-		        "398654");
+		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/adv430",
+        "root",
+        "398654");
 
 		// SQL Query
 		PreparedStatement ps = con.prepareStatement("SELECT * FROM doctor WHERE email=? AND pwd=?");
