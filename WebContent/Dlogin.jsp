@@ -8,11 +8,8 @@
 	String doctorName = "";
 
 	try {
-		// Load MySQL Driver
-		Class.forName("com.mysql.jdbc.Driver");
-
 		// Database Connection
-		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/adv430", "root", "398654");
+		Connection con = hospital.DBConnection.getConnection();
 
 		// SQL Query
 		PreparedStatement ps = con.prepareStatement("SELECT * FROM doctor WHERE email=? AND pwd=?");
