@@ -66,6 +66,14 @@ public class DBConnection {
             dbUrl = "jdbc:" + dbUrl;
         }
         
+        // Auto-append parameters to prevent SSL and public key retrieval handshake failures
+        if (!dbUrl.contains("useSSL=")) {
+            dbUrl += (dbUrl.contains("?") ? "&" : "?") + "useSSL=false";
+        }
+        if (!dbUrl.contains("allowPublicKeyRetrieval=")) {
+            dbUrl += (dbUrl.contains("?") ? "&" : "?") + "allowPublicKeyRetrieval=true";
+        }
+        
         if (dbUser != null && !dbUser.isEmpty()) {
             return DriverManager.getConnection(dbUrl, dbUser, dbPassword);
         } else {
