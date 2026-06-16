@@ -9,6 +9,7 @@ boolean success = false;
 String errorMsg = null;
 try {
     long phone = Long.parseLong(phoneStr);
+    Class.forName("com.mysql.cj.jdbc.Driver");
     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/adv430",
             "root",
             "398654");

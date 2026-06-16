@@ -7,6 +7,7 @@
 		if (id != null && !id.isEmpty()) {
 
 			int ig = Integer.parseInt(id);
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/adv430",
 			        "root",
 			        "398654");

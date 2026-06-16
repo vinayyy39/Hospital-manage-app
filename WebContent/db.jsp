@@ -5,8 +5,9 @@
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
 <%
-Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/adv430",
-        "root",
-        "398654");
+
+Class.forName("com.mysql.cj.jdbc.Driver");
+Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/adv430","root","398654");
+
 Statement st=con.createStatement();
 %>

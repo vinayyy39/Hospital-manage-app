@@ -1,8 +1,6 @@
 package hospital;
 
 public class Cridentials {
-	public static String mysqlurl = "mysql://root:EECmsTBKuvhnNQnwiwLbyFrgFLBZjGxo@mysql.railway.internal:3306/railway";
-	public static String rootPassword = "EECmsTBKuvhnNQnwiwLbyFrgFLBZjGxo";
-	
-
+    public static String mysqlurl = "jdbc:mysql://localhost:3306/adv430";
+    public static String rootPassword = "398654";
 }
