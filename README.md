@@ -2,7 +2,7 @@
 
 A beautiful, premium web-based Hospital Management System (HMS) designed to manage doctors, patients, appointments, billing, and medical records. Built with JSP, HTML5/CSS3, and Java, backing onto a MySQL database.
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/vinayyy39/Hospital-System-App)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/vinayyy39/Hospital-manage-app)
 
 ---
 
