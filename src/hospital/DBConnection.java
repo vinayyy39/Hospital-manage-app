@@ -12,9 +12,9 @@ public class DBConnection {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/adv430",
-                    "root",
-                    "398654"
+                    Cridentials.mysqlurl,
+                    Cridentials.user,
+                    Cridentials.rootPassword
             );
 
         } catch (Exception e) {
