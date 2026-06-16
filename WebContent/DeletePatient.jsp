@@ -7,11 +7,7 @@
 		if (id != null && !id.isEmpty()) {
 
 			int ig = Integer.parseInt(id);
-			Class.forName("com.mysql.jdbc.Driver");
-
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/adv430",
-			        "root",
-			        "398654");
+			Connection con = hospital.DBConnection.getConnection();
 			String sql = "DELETE FROM patient WHERE id=?";
 			PreparedStatement ps = con.prepareStatement(sql);
 

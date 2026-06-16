@@ -6,9 +6,7 @@
 <%@page import="java.sql.Connection"%>
 <%
 
-Class.forName("com.mysql.jdbc.Driver");
-
-Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/adv430","root","398654");
+Connection con = hospital.DBConnection.getConnection();
 
 Statement st=con.createStatement();
 %>
