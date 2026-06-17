@@ -5,13 +5,7 @@
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
 <%
-
-Connection con = hospital.DBConnection.getConnection();
-
-Statement st = null;
-if (con != null) {
-    st = con.createStatement();
-} else {
-    throw new Exception("DATABASE CONNECTION FAILED: You must configure a Cloud Database! Please set DB_URL, DB_USER, and DB_PASSWORD environment variables in your Render dashboard.");
-}
+Class.forName("com.mysql.jdbc.Driver");
+Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/adv430","root","398654");
+Statement st=con.createStatement();
 %>

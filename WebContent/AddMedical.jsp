@@ -214,8 +214,7 @@
 </head>
 <body>
     <div class="container">
-        <a href="PatientHome.jsp" class="back-link">Back to Dashboard</a>
-        
+        <a href="PatientHome.jsp" class="back-link"> Back to Dashboard</a>
         <div class="page-header">
             <h1>Add Medicine</h1>
             <p>Enter medicine details to add to inventory</p>
